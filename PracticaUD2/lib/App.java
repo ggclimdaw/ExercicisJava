@@ -26,10 +26,19 @@ public class App {
                     anotaciones[contaor] = textoUsuario;
                     break;
                 }
+
             }
         } else if (seleccion.equals("2. Listar anotaciones existentes")) {
-            for (int contaor = 0; contaor < anotaciones.length; contaor++)
-                System.out.println(anotaciones[contaor]);
+
+            String anotacionesString = "";
+
+            for (int contaor = 0; contaor < anotaciones.length; contaor++) {
+                if (anotaciones[contaor] != null) {
+                    anotacionesString += anotaciones[contaor] + "\n";
+                }
+            }
+
+            JOptionPane.showMessageDialog(null, anotacionesString);
 
         } else if (seleccion.equals("3. Buscar una anotacion")) {
             System.out.println("Listar anotaciones");
