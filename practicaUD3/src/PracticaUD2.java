@@ -10,67 +10,25 @@ public class PracticaUD2 {
         String[] listadoAnotaciones = new String[100];
         int[] anotacionesImportantes = new int[100];
 
-        // Opciones del menu principal
-        String[] opcionesMenu = { "Crear una anotación", "Listar anotaciones existentes", "Buscar una anotacion",
-                "Eliminar una anotacion",
-                "Modificar una anotación", "Marcar una anotacion como importante",
-                "Desmarcar una antoracion como impotante", "Listar anotaciones importantes", "Salir" };
-
         // Opciones de búsqueda de anotaciones
         String[] opcionesBusqueda = { "Por texto", "Por posición" };
 
-        // Inizializamos el array de anotaciones importantes a -1 para poder saber qué
-        // posiciones no estan marcadas
-        for (int contadorAnotacionesImportantes = 0; contadorAnotacionesImportantes < anotacionesImportantes.length; contadorAnotacionesImportantes++) {
-            anotacionesImportantes[contadorAnotacionesImportantes] = -1;
-        }
+        // Cridem la funció inicializarAnotacionesImp
+        anotacionesImportantes = inicializarAnotacionesImportantes(anotacionesImportantes);
 
         do {
-            String opcionSeleccionada = (String) JOptionPane.showInputDialog(null, "Elige una opción del menú",
-                    "Práctica UD2. Menú principal", JOptionPane.INFORMATION_MESSAGE, null, opcionesMenu,
-                    opcionesMenu[0]);
+            String opcionSeleccionada = generarMenuPrincipal();
 
             if (opcionSeleccionada != null) {
                 // El ususario ha seleccionado una opción
                 switch (opcionSeleccionada) {
 
                     case "Crear una anotación":
-                        String textoAnotacion = JOptionPane.showInputDialog(null, "Introduce un texto",
-                                "Crear anotación", JOptionPane.INFORMATION_MESSAGE);
-                        if (textoAnotacion != null) {
-                            for (int contadorAnotaciones = 0; contadorAnotaciones < listadoAnotaciones.length; contadorAnotaciones++) {
-                                String anotacionSeleccionada = listadoAnotaciones[contadorAnotaciones];
-                                if (anotacionSeleccionada == null) {
-                                    listadoAnotaciones[contadorAnotaciones] = textoAnotacion;
-                                    break;
-                                }
-
-                            }
-
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Pulsado aspa o cancelar, finalizando aplicación",
-                                    "Crear anotación",
-                                    JOptionPane.INFORMATION_MESSAGE);
-                        }
+                        listadoAnotaciones = AnotacionesUtil.crearAnotacion(listadoAnotaciones);
                         break;
 
                     case "Listar anotaciones existentes":
-                        String textoAnotaciones = "";
-                        for (int contadorAnotaciones = 0; contadorAnotaciones < listadoAnotaciones.length; contadorAnotaciones++) {
-                            String anotacionSeleccionada = listadoAnotaciones[contadorAnotaciones];
-                            if (anotacionSeleccionada != null && !anotacionSeleccionada.equals("")) {
-                                textoAnotaciones += "- Posición " + contadorAnotaciones + ": " + anotacionSeleccionada
-                                        + "\n";
-                            }
-                        }
-                        if (textoAnotaciones.equals("")) {
-                            JOptionPane.showMessageDialog(null, "No existen anotaciones almacenada",
-                                    "Listado de Anotaciones", JOptionPane.INFORMATION_MESSAGE);
-                        } else {
-                            JOptionPane.showMessageDialog(null, textoAnotaciones, "Listado de Anotaciones",
-                                    JOptionPane.INFORMATION_MESSAGE);
-                        }
-
+                        AnotacionesUtil.listarAnotaciones(listadoAnotaciones);
                         break;
 
                     case "Buscar una anotacion":
@@ -155,32 +113,9 @@ public class PracticaUD2 {
                         break;
 
                     case "Eliminar una anotacion":
-                        String posicionABuscar = JOptionPane.showInputDialog(null, "Introduce una posicion",
-                                "Eliminar anotación", JOptionPane.INFORMATION_MESSAGE);
-                        if (posicionABuscar != null) {
-                            int indiceABuscar = Integer.parseInt(posicionABuscar);
-                            String anotacionSeleccionada = listadoAnotaciones[indiceABuscar];
-                            if (anotacionSeleccionada != null && !anotacionSeleccionada.equals("")) {
-                                listadoAnotaciones[indiceABuscar] = null;
-
-                                // Si la anotación es importante también debemos desmarcarla
-                                for (int contImportantes = 0; contImportantes < anotacionesImportantes.length; contImportantes++) {
-                                    int indiceSeleccionado = anotacionesImportantes[contImportantes];
-                                    if (indiceSeleccionado == indiceABuscar) {
-                                        anotacionesImportantes[contImportantes] = -1;
-                                        break;
-                                    }
-                                }
-
-                            }
-                            JOptionPane.showMessageDialog(null, "Anotación eliminada correctamente",
-                                    "Buscar una anotacion",
-                                    JOptionPane.INFORMATION_MESSAGE);
-
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Pulsado aspa o cancelar, finalizando apliación",
-                                    "Buscar una anotacion", JOptionPane.INFORMATION_MESSAGE);
-                        }
+                        boolean eliminacionSatisfactoria = AnotacionesUtil.eliminarAnotacion(listadoAnotaciones,
+                                anotacionesImportantes);
+                        System.out.println("Anotacion eliminada con resultado : " + eliminacionSatisfactoria);
                         break;
 
                     case "Modificar una anotación":
@@ -330,4 +265,30 @@ public class PracticaUD2 {
         } while (!finalizarMenu);
 
     }
+
+    private static String generarMenuPrincipal() {
+        // Opciones del menu principal
+        String[] opcionesMenu = { "Crear una anotación", "Listar anotaciones existentes", "Buscar una anotacion",
+                "Eliminar una anotacion",
+                "Modificar una anotación", "Marcar una anotacion como importante",
+                "Desmarcar una antoracion como impotante", "Listar anotaciones importantes", "Salir" };
+
+        String opcionSeleccionada = (String) JOptionPane.showInputDialog(null, "Elige una opción del menú",
+                "Práctica UD2. Menú principal", JOptionPane.INFORMATION_MESSAGE, null, opcionesMenu,
+                opcionesMenu[0]);
+
+        return opcionSeleccionada;
+
+    }
+
+    private static int[] inicializarAnotacionesImportantes(int[] arrayAnotacionesImp) {
+        // Inizializamos el array de anotaciones importantes a -1 para poder saber qué
+        // posiciones no estan marcadas
+        for (int contadorAnotacionesImportantes = 0; contadorAnotacionesImportantes < arrayAnotacionesImp.length; contadorAnotacionesImportantes++) {
+            arrayAnotacionesImp[contadorAnotacionesImportantes] = -1;
+        }
+        return arrayAnotacionesImp;
+
+    }
+
 }

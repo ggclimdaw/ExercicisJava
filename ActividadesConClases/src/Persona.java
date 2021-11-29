@@ -13,4 +13,31 @@ public class Persona {
 
     }
 
+    public boolean esMayorEdad() {
+        // return edad >= 18;
+        if (edad >= 18) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Persona() {
+        System.out.println("Ejecutando Constructor");
+        nombre = "Sin nombre";
+        apellidos = "Sin apellido";
+        edad = -1;
+        dni = "---------";
+
+    }
+
+    public Persona(String nombreRec, String apellidosRec, String dniRec, int edadRec) {
+        System.out.println("Ejecutando contructor con paràmetros");
+        nombre = nombreRec;
+        apellidos = apellidosRec;
+        edad = edadRec;
+        dni = dniRec;
+
+    }
+
 }
